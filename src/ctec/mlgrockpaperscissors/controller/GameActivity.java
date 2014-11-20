@@ -1,8 +1,10 @@
 package ctec.mlgrockpaperscissors.controller;
 
 import java.lang.reflect.Array;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +30,7 @@ public class GameActivity extends Activity
 	private int userScore;
 	private String botChoice = "";
 	private String[] botAi;
+	private MediaPlayer soundEffectPlayer;
 	
 
 	@Override
@@ -81,11 +84,13 @@ public class GameActivity extends Activity
 				}
 				else if(botChoice.equals("scissors"))
 				{
+					winSoundEffectPlayer();
 					killStreak++;
 					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
 					numberOfWins = numberOfWins + 100;
 					scoreTextView.setText("Wins: " + Integer.toString(numberOfWins));
 					resultTextView.setText("You win!");
+					
 				}
 				BotAiSystem();
 			}
@@ -99,6 +104,7 @@ public class GameActivity extends Activity
 			{
 				if(botChoice.equals("rock"))
 				{
+					winSoundEffectPlayer();
 					killStreak++;
 					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
 					numberOfWins = numberOfWins + 100;
@@ -149,6 +155,7 @@ public class GameActivity extends Activity
 				}
 				else if(botChoice.equals("paper"))
 				{
+					winSoundEffectPlayer();
 					numberOfWins = numberOfWins + 100;
 					scoreTextView.setText("Wins: " + Integer.toString(numberOfWins));
 					killStreak++;
@@ -203,7 +210,31 @@ public class GameActivity extends Activity
 		{
 			botChoice = botAi[2];
 			opponentChoiceImage.setImageResource(R.drawable.scissors);
+		}	
+	}
+	
+	private void winSoundEffectPlayer()
+	{
+		int randomPosition = (int) (Math.random() * 3);
+		
+		if(randomPosition == 0)
+		{
+			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.hitmarker);
 		}
+		else if(randomPosition == 1)
+		{
+			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.wrongbuzzer);
+		}
+		else if(randomPosition == 2)
+		{
+			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.ohbabytriple);
+		}
+		soundEffectPlayer.start();
+	}
+	private void loseSoundEffectPlayer()
+	{
+		soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.wrongbuzzer);
+		soundEffectPlayer.start();
 	}
 	
 	private boolean isDead(int numberOfLives)
