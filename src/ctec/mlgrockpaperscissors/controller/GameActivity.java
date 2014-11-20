@@ -20,6 +20,7 @@ public class GameActivity extends Activity
 	private TextView resultTextView;
 	private TextView scoreTextView;
 	private TextView livesTextView;
+	private TextView streakTextView;
 	private ImageView opponentChoiceImage;
 	private int numberOfWins = 0;
 	private int killStreak = 0;
@@ -43,6 +44,7 @@ public class GameActivity extends Activity
 		opponentChoiceImage = (ImageView) findViewById(R.id.opponentChoiceImage);
 		scoreTextView = (TextView) findViewById(R.id.scoreTextView);
 		livesTextView = (TextView) findViewById(R.id.livesTextView);
+		streakTextView = (TextView) findViewById(R.id.streakTextView);
 		
 		botAIArrayList();
 
@@ -65,11 +67,23 @@ public class GameActivity extends Activity
 				}
 				else if(botChoice.equals("paper"))
 				{
+					killStreak = 0;
+					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
+					numberOfLives--;
+					livesTextView.setText("Lives: " + Integer.toString(numberOfLives));
+					if(isDead(numberOfLives))
+					{
+						Intent currentIntent = new Intent();
+						setResult(RESULT_OK, currentIntent);
+						finish();
+					}
 					resultTextView.setText("You lose!");
 				}
 				else if(botChoice.equals("scissors"))
 				{
-					numberOfWins++;
+					killStreak++;
+					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
+					numberOfWins = numberOfWins + 100;
 					scoreTextView.setText("Wins: " + Integer.toString(numberOfWins));
 					resultTextView.setText("You win!");
 				}
@@ -85,7 +99,9 @@ public class GameActivity extends Activity
 			{
 				if(botChoice.equals("rock"))
 				{
-					numberOfWins++;
+					killStreak++;
+					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
+					numberOfWins = numberOfWins + 100;
 					scoreTextView.setText("Wins: " + Integer.toString(numberOfWins));
 					resultTextView.setText("You win!");
 				}
@@ -95,6 +111,16 @@ public class GameActivity extends Activity
 				}
 				else if(botChoice.equals("scissors"))
 				{
+					killStreak = 0;
+					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
+					numberOfLives--;
+					livesTextView.setText("Lives: " + Integer.toString(numberOfLives));
+					if(isDead(numberOfLives))
+					{
+						Intent currentIntent = new Intent();
+						setResult(RESULT_OK, currentIntent);
+						finish();
+					}
 					resultTextView.setText("You lose!");
 				}
 				BotAiSystem();
@@ -109,12 +135,24 @@ public class GameActivity extends Activity
 			{
 				if(botChoice.equals("rock"))
 				{
+					killStreak = 0;
+					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
+					numberOfLives--;
+					livesTextView.setText("Lives: " + Integer.toString(numberOfLives));
+					if(isDead(numberOfLives))
+					{
+						Intent currentIntent = new Intent();
+						setResult(RESULT_OK, currentIntent);
+						finish();
+					}
 					resultTextView.setText("You lose!");
 				}
 				else if(botChoice.equals("paper"))
 				{
-					numberOfWins++;
+					numberOfWins = numberOfWins + 100;
 					scoreTextView.setText("Wins: " + Integer.toString(numberOfWins));
+					killStreak++;
+					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
 					resultTextView.setText("You win!");
 				}
 				else if(botChoice.equals("scissors"))
