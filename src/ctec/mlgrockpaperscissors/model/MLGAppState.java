@@ -1,14 +1,21 @@
 package ctec.mlgrockpaperscissors.model;
 
 import android.app.Application;
+import android.content.SharedPreferences.Editor;
+import android.content.*;
 
 public class MLGAppState extends Application
 {
 
-	private int overallScore = 0;
-	private int highestKillStreak = 0;
-	private int highestScore = 0;
-	private int overallKills = 0;
+	public int overallScore = 0;
+	public int highestKillStreak = 0;
+	public int highestScore = 0;
+	public int overallKills = 0;
+	
+//	public void onCreate()
+//	{
+//		super.onCreate();
+//	}
 	
 	public int getOverallScore()
 	{
@@ -41,5 +48,10 @@ public class MLGAppState extends Application
 	public void setOverallKills(int overallKills)
 	{
 		this.overallKills = overallKills;
+	}
+	
+	public void saveData()
+	{
+		
 	}
 }

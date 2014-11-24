@@ -64,4 +64,12 @@
         android:layout_centerHorizontal="true"
         android:text="Update" />
 
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/updateButton"
+        android:layout_centerHorizontal="true"
+        android:text="Save" />
+
 </RelativeLayout>
