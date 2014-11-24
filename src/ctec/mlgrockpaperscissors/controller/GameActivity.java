@@ -2,6 +2,7 @@ package ctec.mlgrockpaperscissors.controller;
 
 import java.lang.reflect.Array;
 
+import ctec.mlgrockpaperscissors.model.MLGAppState;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -24,14 +25,14 @@ public class GameActivity extends Activity
 	private TextView livesTextView;
 	private TextView streakTextView;
 	private ImageView opponentChoiceImage;
-	private int numberOfWins = 0;
+	private int userScore = 0;
 	private int killStreak = 0;
 	private int numberOfLives = 3;
-	private int userScore;
 	private String botChoice = "";
 	private String[] botAi;
 	private MediaPlayer soundEffectPlayer;
-	
+	private MLGAppState appState;
+	private TitleActivity titleActivity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -48,6 +49,8 @@ public class GameActivity extends Activity
 		scoreTextView = (TextView) findViewById(R.id.scoreTextView);
 		livesTextView = (TextView) findViewById(R.id.livesTextView);
 		streakTextView = (TextView) findViewById(R.id.streakTextView);
+		
+		appState = (MLGAppState) getApplication();
 		
 		botAIArrayList();
 
@@ -67,15 +70,20 @@ public class GameActivity extends Activity
 				if(botChoice.equals("rock"))
 				{
 					resultTextView.setText("You tie!");
+					soundEffectPlayer = MediaPlayer.create(getBaseContext(), R.raw.hitmarkerlooped);
+					soundEffectPlayer.start();
 				}
 				else if(botChoice.equals("paper"))
 				{
+					updateHighestKillStreak();
 					killStreak = 0;
 					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
 					numberOfLives--;
 					livesTextView.setText("Lives: " + Integer.toString(numberOfLives));
+					loseSoundEffectPlayer();
 					if(isDead(numberOfLives))
 					{
+						updateAchievements();
 						Intent currentIntent = new Intent();
 						setResult(RESULT_OK, currentIntent);
 						finish();
@@ -84,12 +92,12 @@ public class GameActivity extends Activity
 				}
 				else if(botChoice.equals("scissors"))
 				{
-					winSoundEffectPlayer();
 					killStreak++;
 					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
-					numberOfWins = numberOfWins + 100;
-					scoreTextView.setText("Wins: " + Integer.toString(numberOfWins));
+					userScore = userScore + 100;
+					scoreTextView.setText("Score: " + Integer.toString(userScore));
 					resultTextView.setText("You win!");
+					winSoundEffectPlayer();
 					
 				}
 				BotAiSystem();
@@ -104,25 +112,30 @@ public class GameActivity extends Activity
 			{
 				if(botChoice.equals("rock"))
 				{
-					winSoundEffectPlayer();
 					killStreak++;
 					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
-					numberOfWins = numberOfWins + 100;
-					scoreTextView.setText("Wins: " + Integer.toString(numberOfWins));
+					userScore = userScore + 100;
+					scoreTextView.setText("Score: " + Integer.toString(userScore));
 					resultTextView.setText("You win!");
+					winSoundEffectPlayer();
 				}
 				else if(botChoice.equals("paper"))
 				{
 					resultTextView.setText("You tie!");
+					soundEffectPlayer = MediaPlayer.create(getBaseContext(), R.raw.hitmarkerlooped);
+					soundEffectPlayer.start();
 				}
 				else if(botChoice.equals("scissors"))
 				{
+					updateHighestKillStreak();
 					killStreak = 0;
 					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
 					numberOfLives--;
 					livesTextView.setText("Lives: " + Integer.toString(numberOfLives));
+					loseSoundEffectPlayer();
 					if(isDead(numberOfLives))
 					{
+						updateAchievements();
 						Intent currentIntent = new Intent();
 						setResult(RESULT_OK, currentIntent);
 						finish();
@@ -141,30 +154,36 @@ public class GameActivity extends Activity
 			{
 				if(botChoice.equals("rock"))
 				{
+					updateHighestKillStreak();
 					killStreak = 0;
 					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
 					numberOfLives--;
 					livesTextView.setText("Lives: " + Integer.toString(numberOfLives));
+					loseSoundEffectPlayer();
 					if(isDead(numberOfLives))
 					{
+						updateAchievements();
 						Intent currentIntent = new Intent();
 						setResult(RESULT_OK, currentIntent);
 						finish();
 					}
+
 					resultTextView.setText("You lose!");
 				}
 				else if(botChoice.equals("paper"))
 				{
-					winSoundEffectPlayer();
-					numberOfWins = numberOfWins + 100;
-					scoreTextView.setText("Wins: " + Integer.toString(numberOfWins));
+					userScore = userScore + 100;
+					scoreTextView.setText("Score: " + Integer.toString(userScore));
 					killStreak++;
 					streakTextView.setText("Kill Streak: " + Integer.toString(killStreak));
 					resultTextView.setText("You win!");
+					winSoundEffectPlayer();
 				}
 				else if(botChoice.equals("scissors"))
 				{
 					resultTextView.setText("You tie!");
+					soundEffectPlayer = MediaPlayer.create(getBaseContext(), R.raw.hitmarkerlooped);
+					soundEffectPlayer.start();
 				}
 				BotAiSystem();
 			}
@@ -176,6 +195,7 @@ public class GameActivity extends Activity
 			@Override
 			public void onClick(View currentView)
 			{
+				updateAchievements();
 				Intent currentIntent = new Intent();
 				setResult(RESULT_OK, currentIntent);
 				finish();
@@ -217,17 +237,21 @@ public class GameActivity extends Activity
 	{
 		int randomPosition = (int) (Math.random() * 3);
 		
-		if(randomPosition == 0)
+		if((killStreak % 3) == 0)
+		{
+			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.ohbabytriple);
+		}
+		else if(randomPosition == 0)
 		{
 			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.hitmarker);
 		}
 		else if(randomPosition == 1)
 		{
-			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.wrongbuzzer);
+			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.hitmarker);
 		}
 		else if(randomPosition == 2)
 		{
-			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.ohbabytriple);
+			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.hitmarker);
 		}
 		soundEffectPlayer.start();
 	}
@@ -237,6 +261,23 @@ public class GameActivity extends Activity
 		soundEffectPlayer.start();
 	}
 	
+	private void updateAchievements()
+	{
+		appState.setOverallKills(appState.getOverallKills() + (userScore/100));
+		appState.setOverallScore(appState.getOverallScore() + userScore);
+		if(appState.getHighestScore() < userScore)
+		{
+			appState.setHighestScore(userScore);
+		}
+	}
+	
+	private void updateHighestKillStreak()
+	{
+		if(appState.getHighestKillStreak() < killStreak )
+		{
+			appState.setHighestKillStreak(killStreak);
+		}
+	}
 	private boolean isDead(int numberOfLives)
 	{
 		boolean isDead = false;

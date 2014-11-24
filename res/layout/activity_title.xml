@@ -23,4 +23,45 @@
         android:text="Acheivements"
         android:textSize="@dimen/Fifteenpt" />
 
+    <TextView
+        android:id="@+id/overallScoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/resultTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="Overall Score: 0" />
+
+    <TextView
+        android:id="@+id/overallKillsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/overallScoreTextView"
+        android:layout_centerHorizontal="true"
+        android:text="Overall Kills: 0" />
+
+    <TextView
+        android:id="@+id/highestScoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/overallKillsTextView"
+        android:layout_centerHorizontal="true"
+        android:text="High Score: 0" />
+
+    <TextView
+        android:id="@+id/highestKillStreakTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/highestScoreTextView"
+        android:layout_centerHorizontal="true"
+        android:text="Highest Kill Streak: 0" />
+
+    <Button
+        android:id="@+id/updateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/highestKillStreakTextView"
+        android:layout_centerHorizontal="true"
+        android:text="Update" />
+
 </RelativeLayout>
