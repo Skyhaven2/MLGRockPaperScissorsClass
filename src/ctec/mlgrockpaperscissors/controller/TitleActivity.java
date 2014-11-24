@@ -50,6 +50,7 @@ public class TitleActivity extends Activity
 		appState = (MLGAppState) getApplication();
 		
 		setTextViewsStart();
+		setAppStateStart();
 		
 		setupListners();
 	}
@@ -109,6 +110,14 @@ public class TitleActivity extends Activity
 		overallKillsTextView.setText("Overall Kills: " + Integer.toString(sharedpreferences.getInt(OverallKills, 0)));
 		highestScoreTextView.setText("High Score: " + Integer.toString(sharedpreferences.getInt(HighestScore, 0)));
 		highestKillStreakTextView.setText("Highest Kill Streak: " + Integer.toString(sharedpreferences.getInt(HighestKillStreak, 0)));
+	}
+	
+	public void setAppStateStart()
+	{
+		appState.setOverallScore(sharedpreferences.getInt(OverallScore, 0));
+		appState.setOverallKills(sharedpreferences.getInt(OverallKills, 0));
+		appState.setHighestScore(sharedpreferences.getInt(HighestScore, 0));
+		appState.setHighestKillStreak(sharedpreferences.getInt(HighestKillStreak, 0));
 	}
 	
 }

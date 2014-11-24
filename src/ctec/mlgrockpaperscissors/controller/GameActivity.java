@@ -243,7 +243,7 @@ public class GameActivity extends Activity
 		}
 		else if(randomPosition == 0)
 		{
-			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.hitmarker);
+			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.hitmarkerlooped);
 		}
 		else if(randomPosition == 1)
 		{
@@ -257,7 +257,17 @@ public class GameActivity extends Activity
 	}
 	private void loseSoundEffectPlayer()
 	{
-		soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.wrongbuzzer);
+		int randomPosition = (int) (Math.random() * 1);
+		if(randomPosition == 0)
+		{
+			soundEffectPlayer = MediaPlayer.create(getBaseContext(), R.raw.hitmarkerlooped);
+			
+		}
+		else if(randomPosition == 1)
+		{
+			soundEffectPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.wrongbuzzer);
+		}
+		
 		soundEffectPlayer.start();
 	}
 	
